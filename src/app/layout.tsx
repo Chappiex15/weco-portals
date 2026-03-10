@@ -36,7 +36,7 @@ export default function RootLayout({
           <div className="container footer-content">
             <div className="footer-brand">
               <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '1rem' }}>
-                <img src="/assets/weco_logo.png" alt="WECo Logo" style={{ height: '55px', objectFit: 'contain', objectPosition: 'left', marginBottom: '0.2rem' }} />
+                <div className="logo"><span className="logo-icon">&#x2B22;</span> WECo. <span className="accent">civil</span></div>
                 <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', letterSpacing: '0.5px', marginTop: '-0.2rem', textTransform: 'uppercase' }}>
                   A division of Widmanstätten Engineering Corporation.
                 </span>

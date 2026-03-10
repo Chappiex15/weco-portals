@@ -26,7 +26,9 @@ export default function ClientDashboard() {
       <header style={{ background: 'rgba(4, 13, 26, 0.95)', borderBottom: '1px solid rgba(212, 175, 55, 0.2)', padding: '1rem 2rem', position: 'sticky', top: 0, zIndex: 100, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <img src="/assets/weco_logo.png" alt="WECo Logo" style={{ height: '40px', objectFit: 'contain', objectPosition: 'left', marginBottom: '0.2rem' }} />
+            <div className="logo" style={{ fontSize: '1.2rem' }}>
+              <span className="logo-icon">&#x2B22;</span> WECo. <span className="accent">Portal</span>
+            </div>
             <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)', letterSpacing: '0.5px', marginTop: '-0.2rem', textTransform: 'uppercase' }}>
               A division of Widmanstätten Engineering Corporation.
             </span>
