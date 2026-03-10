@@ -32,9 +32,7 @@ export default function LoginPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
           <Link href="/" style={{ textDecoration: 'none' }}>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <div className="logo" style={{ fontSize: '1.2rem' }}>
-                <span className="logo-icon">&#x2B22;</span> WECo. <span className="accent">civil</span>
-              </div>
+              <img src="/assets/weco_logo.png" alt="WECo Logo" style={{ height: '40px', objectFit: 'contain', objectPosition: 'left', marginBottom: '0.2rem' }} />
               <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)', letterSpacing: '0.5px', marginTop: '-0.2rem', textTransform: 'uppercase' }}>
                 A division of Widmanstätten Engineering Corporation.
               </span>
