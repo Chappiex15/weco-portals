@@ -12,9 +12,12 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
       return NextResponse.redirect(`${origin}${next}`);
+    } else {
+      console.error('Auth Error:', error);
+      return NextResponse.redirect(`${origin}/portal/login?error=auth_callback_failed&details=${encodeURIComponent(error.message)}`);
     }
   }
 
   // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/portal/login?error=auth_callback_failed`);
+  return NextResponse.redirect(`${origin}/portal/login?error=no_code_provided`);
 }
