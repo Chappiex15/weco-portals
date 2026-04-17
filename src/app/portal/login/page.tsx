@@ -19,7 +19,7 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `https://wengineeringcorp.netlify.app/auth/callback?next=/portal/client/dashboard`,
+        redirectTo: `${window.location.origin}/auth/callback?next=/portal/client/dashboard`,
       },
     });
     if (error) {
