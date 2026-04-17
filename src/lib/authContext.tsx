@@ -22,15 +22,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // 1. Check Supabase session first
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
-        setUser({
-          id: session.user.id,
-          name: session.user.user_metadata?.full_name || session.user.email || 'Client User',
-          email: session.user.email || '',
-          role: 'client', // Defaults new Google auth signups to client
-          company: 'External Client'
-        });
+        // Fetch real profile data from our new table
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+
+        if (profile) {
+          setUser({
+            id: profile.id,
+            name: profile.full_name || session.user.email || 'User',
+            email: profile.email,
+            role: profile.role,
+            company: profile.company_name,
+            title: profile.department // mapping department to title for now
+          });
+        }
         setIsLoading(false);
       } else {
         // 2. Fallback to local mock session for demo accounts
@@ -45,16 +55,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     });
 
-    // Listen for Auth changes (like redirect back from Google)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    // Listen for Auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
-        setUser({
-          id: session.user.id,
-          name: session.user.user_metadata?.full_name || session.user.email || 'Client User',
-          email: session.user.email || '',
-          role: 'client',
-          company: 'External Client'
-        });
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+
+        if (profile) {
+          setUser({
+            id: profile.id,
+            name: profile.full_name || session.user.email || 'User',
+            email: profile.email,
+            role: profile.role,
+            company: profile.company_name,
+            title: profile.department
+          });
+        }
       } else {
         const savedUserId = localStorage.getItem('weco_session_id');
         if (!savedUserId) {
@@ -81,10 +100,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } else {
       if (isLoginRoute) {
         // Redirect away from login if already logged in
-        router.push(user.role === 'client' ? '/portal/client/dashboard' : '/portal/employee/dashboard');
-      } else if (isClientRoute && user.role !== 'client') {
+        if (user.role === 'admin') router.push('/portal/admin');
+        else if (user.role === 'employee') router.push('/portal/employee/dashboard');
+        else router.push('/portal/client/dashboard');
+      } else if (isClientRoute && user.role === 'employee') {
         router.push('/portal/employee/dashboard'); // Block employee from client route
-      } else if (isEmployeeRoute && user.role !== 'employee') {
+      } else if (isEmployeeRoute && user.role === 'client') {
         router.push('/portal/client/dashboard'); // Block client from employee route
       }
     }

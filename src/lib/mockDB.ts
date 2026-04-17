@@ -1,5 +1,5 @@
 // users schema
-export type Role = 'client' | 'employee';
+export type Role = 'client' | 'employee' | 'admin';
 
 export interface User {
   id: string;

@@ -31,7 +31,24 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  // Protect Admin Route
+  if (request.nextUrl.pathname.startsWith('/portal/admin')) {
+    if (!user) {
+      return NextResponse.redirect(new URL('/portal/login', request.url));
+    }
+    
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+
+    if (profile?.role !== 'admin') {
+      return NextResponse.redirect(new URL('/portal/login', request.url));
+    }
+  }
 
   return response;
 }
