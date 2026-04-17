@@ -4,5 +4,12 @@ export function createClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-  return createBrowserClient(supabaseUrl, supabaseKey);
+  return createBrowserClient(supabaseUrl, supabaseKey, {
+    cookieOptions: {
+      name: 'sb-auth-token',
+      path: '/',
+      sameSite: 'lax',
+      secure: true,
+    },
+  });
 }
